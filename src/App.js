@@ -38,6 +38,31 @@ class App extends Component {
     let newBalance = this.state.accountBalance - debitNum;
     this.setState({accountBalance: newBalance});
   }
+  async componentDidMount()
+  {
+    let balance = 0.00;
+    let apiCredits = 'https://johnnylaicode.github.io/api/credits.json';  // Link to remote API endpoint to get credits
+    let apiDebits = 'https://johnnylaicode.github.io/api/debits.json';    // Link to remote API endpoint to get debits
+    try {  // Accept success response as array of JSON objects (credits and debits)
+      let responseCredits = await axios.get(apiCredits);  // Store received data in state's "creditList" object
+      this.setState({creditList: responseCredits.data});  // set the state of creditList
+      for(let i=0;i<this.state.creditList.length;i++)    // add up all of the credit amounts to balance
+        balance += this.state.creditList[i].amount;
+      let responseDebits = await axios.get(apiDebits);    // Store received data in state's "creditList" object
+      this.setState({debitList: responseDebits.data});    // set the state of debitList
+      for(let i=0;i<this.state.debitList.length;i++)      // subtract the debits from balance
+        balance -= this.state.debitList[i].amount;
+      balance += this.state.accountBalance;               // calculate the new accountBalance
+      this.setState({accountBalance: balance});           // set the state of accountBalance
+    } 
+    // catches any errors when calling api
+    catch (error) {  
+      if (error.response) {
+        console.log(error.response.data);  // Print out error message 
+        console.log(error.response.status);  // Print out error status code 
+      }    
+    }
+  }
 
   // Update state's currentUser (userName) after "Log In" button is clicked
   mockLogIn = (logInInfo) => {  
