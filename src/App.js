@@ -6,6 +6,7 @@ It contains the top-level state.
 ==================================================*/
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
+import axios from 'axios'; 
 
 // Import other components
 import Home from './components/Home';
@@ -18,14 +19,24 @@ class App extends Component {
   constructor() {  // Create and initialize state
     super(); 
     this.state = {
-      accountBalance: 1234567.89,
+      accountBalance: 0.00, 
       creditList: [],
       debitList: [],
       currentUser: {
-        userName: 'Joe Smith',
-        memberSince: '11/22/99',
+        userName: '',
+        memberSince: '',
       }
     };
+  }
+  addCredit = (creditNum) =>
+  {
+    let newBalance = this.state.accountBalance + creditNum;
+    this.setState({accountBalance: newBalance});
+  }
+  addDebit = (debitNum) =>
+  {
+    let newBalance = this.state.accountBalance - debitNum;
+    this.setState({accountBalance: newBalance});
   }
 
   // Update state's currentUser (userName) after "Log In" button is clicked
@@ -38,7 +49,7 @@ class App extends Component {
   // Create Routes and React elements to be rendered using React components
   render() {  
     // Create React elements and pass input props to components
-    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} />)
+    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance}/>)
     const UserProfileComponent = () => (
       <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
     )
