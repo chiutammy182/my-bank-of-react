@@ -28,16 +28,49 @@ class App extends Component {
       }
     };
   }
-  addCredit = (creditNum) =>
+  formDate = (newDate) => 
   {
-    let newBalance = this.state.accountBalance + creditNum;
-    this.setState({accountBalance: newBalance});
+    newDate = newDate.toLocaleString();
+    let index = 0;
+    let tally = 0;
+    let month, day, collect = "";
+    while(newDate[index]!==',')
+    {
+      if(newDate[index]!=='/')
+        collect+=newDate[index];
+      else
+      {
+          if(tally===0)
+          {   if(collect.length<2)
+                collect = '0' + collect;
+            month=collect;
+          }
+          else if(tally===1)
+          {
+            if(collect.length<2)
+                collect = '0'+ collect;
+            day=collect;
+          }
+          tally++;
+          collect="";
+      }
+      index++;
+    }
+    return (collect+'-'+month+'-'+day);
   }
-  addDebit = (debitNum) =>
+  addCredit = (e) =>
   {
-    let newBalance = this.state.accountBalance - debitNum;
-    this.setState({accountBalance: newBalance});
+    e.preventDefault();
+    let newCreditList = [...this.state.creditList];
+    let newDate = new Date();
+    newDate = this.formDate(newDate);
+    let newCreditEntry = {amount: parseFloat(e.target.amount.value), date: newDate, description: e.target.description.value, id: this.state.creditList.length};
+    newCreditList.push(newCreditEntry);
+    this.setState({creditList: newCreditList});
+    let newBalance = this.state.accountBalance + parseFloat(e.target.amount.value);
+    this.setState({accountBalance: newBalance}); 
   }
+
   async componentDidMount()
   {
     let balance = 0.00;
@@ -79,7 +112,7 @@ class App extends Component {
       <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
     )
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
-    const CreditsComponent = () => (<Credits credits={this.state.creditList} />) 
+    const CreditsComponent = () => (<Credits credits={this.state.creditList} accountBalance={this.state.accountBalance} addCredit={this.addCredit}/>) 
     const DebitsComponent = () => (<Debits debits={this.state.debitList} />) 
 
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
