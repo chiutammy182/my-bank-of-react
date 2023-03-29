@@ -71,6 +71,19 @@ class App extends Component {
     this.setState({accountBalance: newBalance}); 
   }
 
+  addDebit = (e) =>
+  {
+    e.preventDefault();
+    let newDebitList = [...this.state.debitList];
+    let newDate = new Date();
+    newDate = this.formDate(newDate);
+    let newDebitEntry = {amount: parseFloat(e.target.amount.value), date: newDate, description: e.target.description.value, id: this.state.debitList.length};
+    newDebitList.push(newDebitEntry);
+    this.setState({debitList: newDebitList});
+    let newBalance = this.state.accountBalance - parseFloat(e.target.amount.value);
+    this.setState({accountBalance: newBalance});
+  }
+
   async componentDidMount()
   {
     let balance = 0.00;
@@ -113,7 +126,7 @@ class App extends Component {
     )
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
     const CreditsComponent = () => (<Credits credits={this.state.creditList} accountBalance={this.state.accountBalance} addCredit={this.addCredit}/>) 
-    const DebitsComponent = () => (<Debits debits={this.state.debitList} />) 
+    const DebitsComponent = () => (<Debits debits={this.state.debitList} accountBalance={this.state.accountBalance} addDebit={this.addDebit}/>) 
 
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
     return (
