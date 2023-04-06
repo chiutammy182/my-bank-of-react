@@ -30,6 +30,14 @@ const Debits = (props) => {
       </form>
       <br/>
       <Link to="/">Return to Home</Link>
+      <br/>
+      <Link to="/userProfile">User Profile</Link>
+      <br/>
+      <Link to="/login">Login</Link>
+      <br/>
+      <Link to="/credits">Credits</Link>
+      <br/>
+      <Link to="/debits">Debits</Link>
       <AccountBalance accountBalance={props.accountBalance}/>
     </div>
   );
