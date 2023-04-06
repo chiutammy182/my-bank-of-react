@@ -17,6 +17,7 @@ const Credits = (props) => {
      return <li key={credit.id}>{credit.amount} {credit.description} {date}</li>
    });
   }
+  // Render the list of Credit items and a form to input new Credit item
  return (
    <div>
      <h1>Credits</h1>
