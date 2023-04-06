@@ -23,8 +23,8 @@ class App extends Component {
       creditList: [],
       debitList: [],
       currentUser: {
-        userName: '',
-        memberSince: '',
+        userName: 'Joe Smith',
+        memberSince: '11/22/99',
       }
     };
   }
